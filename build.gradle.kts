@@ -52,6 +52,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+
 gluonfx {
     reflectionList = listOf(
         "com.example.victusHub.VictusHub",
@@ -85,5 +86,14 @@ gluonfx {
         "javafx.scene.layout.StackPane"
     )
     resourcesList = listOf("src/main/resources/com/example/victusHub/hello-view.fxml")
+
 }
+tasks.register<Copy>("victusBuild") {
+    dependsOn("nativeBuild")
+
+    from("build/gluonfx/x86_64-linux/victushub")
+    into("Installer")
+
+}
+
 
