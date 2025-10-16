@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# VictusHub full uninstall/restore script: move binary back, remove sudoers, desktop entry, icon
+# VictusHub full uninstall/restore script
 
 set -e
 
 APP_NAME="VictusHub"
 TARGET="/usr/local/bin/victusHub"
-RESTORE_DIR="$PWD"  # script hangi klasörde çalıştırılırsa oraya taşır
+RESTORE_DIR="$PWD"
 RESTORED_BINARY="$RESTORE_DIR/victusHub"
 
 SUDOERS_FILE="/etc/sudoers.d/victusHub-$(whoami)"
@@ -16,12 +16,12 @@ ICON_TARGET="$ICON_TARGET_DIR/victushub.png"
 
 echo "Starting full uninstall/restore of $APP_NAME..."
 
-# ---------- 1️⃣ Move binary ----------
+# ---------- 1️⃣ Move binary back ----------
 if [[ -f "$TARGET" ]]; then
     echo "Moving $TARGET -> $RESTORED_BINARY (requires sudo)..."
     sudo mv "$TARGET" "$RESTORED_BINARY"
     sudo chmod 755 "$RESTORED_BINARY"
-    echo "Binary restored to $RESTORED_BINARY"
+    echo "Binary restored to $RESTORE_DIR"
 else
     echo "Binary not found in $TARGET, skipping move."
 fi

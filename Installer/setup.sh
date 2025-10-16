@@ -11,13 +11,27 @@ TARGET="/usr/local/bin/victusHub"
 DESKTOP_DIR="$HOME/.local/share/applications"
 DESKTOP_FILE="$DESKTOP_DIR/victushub.desktop"
 
-# Icon
-ICON_SOURCE="./icon.png"                       # Aynı klasördeki icon
+ICON_SOURCE="./icon.png"
 ICON_TARGET_DIR="$HOME/.local/share/icons/hicolor/128x128/apps"
-ICON_TARGET="$ICON_TARGET_DIR/victushub.png"  # .desktop uyumlu isim
-
+ICON_TARGET="$ICON_TARGET_DIR/victushub.png"
 # Sudoers
 SUDOERS_FILE="/etc/sudoers.d/victusHub-$(whoami)"
+
+# ---------- 0️⃣ Check git ----------
+if ! command -v git >/dev/null 2>&1; then
+    echo "git is not installed. Please install git manually and re-run this installer."
+    exit 1
+fi
+
+# ---------- 1️⃣ Clone and build dependency ----------
+if [[ ! -d "hp-wmi-fan-and-backlight-control" ]]; then
+    git clone https://github.com/Vilez0/hp-wmi-fan-and-backlight-control
+fi
+cd hp-wmi-fan-and-backlight-control
+make
+sudo make install-dkms
+cd ..
+
 
 # ---------- 1️⃣ Move binary ----------
 if [[ ! -f "$BINARY" ]]; then
@@ -74,7 +88,7 @@ EOL
 chmod 644 "$DESKTOP_FILE"
 echo "Desktop entry created at $DESKTOP_FILE"
 
-# Optional: refresh desktop cache
+
 if command -v update-desktop-database >/dev/null 2>&1; then
     update-desktop-database "$DESKTOP_DIR" || true
 fi
