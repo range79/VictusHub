@@ -298,6 +298,11 @@ Before you begin, make sure you have the following installed:
 - **unzip**
 ---
 
+### Project Ui
+
+<img src="images/img.png" width="50%" style="position: relative; top: 0; right: 0;" alt="Project Logo"/>
+
+
 ### ⚙️ Installation
 
 Follow the steps below to build and install **VictusHub** from the source.
