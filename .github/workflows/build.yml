@@ -15,6 +15,10 @@ jobs:
           distribution: 'graalvm' # See 'Supported distributions' for available options
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get version from Gradle
+        id: get_version
+        run: echo "VERSION=$(./gradlew properties | grep 'version:')" >> $GITHUB_ENV
+
       - name: Install native build dependencies
         run: |
          sudo apt-get update
@@ -44,9 +48,18 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
-          name: "VictusHub Build #${{ github.run_number }}"
+          name: "VictusHub ${{ env.VERSION }}"
           body: |
-            Otomatik build.
+           ### 🧰 Usage
+
+
+            ```bash
+             unzip files
+             chmod 777 setup.sh
+             ./setup.sh
+             ```
+              Installation completed!
+           
             - Commit: ${{ github.sha }}
             - Branch: ${{ github.ref_name }}
           files: VictusHub.zip
