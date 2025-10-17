@@ -18,4 +18,4 @@ jobs:
           native-image --version
 
       - name: Build jar
-        run: gradlew nativeCompile
+        run: ./gradlew victusBuild
