@@ -1,5 +1,12 @@
 name: GraalVM build
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 
 permissions:
   contents: write
@@ -11,13 +18,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '17'      # See 'Options' for more details
+          java-version: '17' #      # See 'Options' for more details
           distribution: 'graalvm' # See 'Supported distributions' for available options
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get version from Gradle
         id: get_version
-        run: echo "VERSION=$(./gradlew properties | grep 'version:')" >> $GITHUB_ENV
+        run: echo "VERSION=$(./gradlew properties | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Install native build dependencies
         run: |
@@ -30,7 +37,7 @@ jobs:
             libfreetype6-dev libgl-dev libglib2.0-dev libgtk-3-dev \
             libpango1.0-dev libx11-dev libxtst-dev
 
-      - name: Example step
+      - name: Java Check
         run: |
           echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"

@@ -1,4 +1,4 @@
-package com.example.victusHub;
+package com.range.victusHub;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,8 @@ public class VictusHub extends Application {
     }
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(VictusHub.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com.range.victusHub/hello-view.fxml"));
+
         Scene scene = new Scene(fxmlLoader.load(), 700, 1000);
         stage.setTitle("Victus Hub");
         stage.setScene(scene);

@@ -1,0 +1,4 @@
+rootProject.name = "VictusHub"
+
+include("Victushub-gui")
+include("VictusService")

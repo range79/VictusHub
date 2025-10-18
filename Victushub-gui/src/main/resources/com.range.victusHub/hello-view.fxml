@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="450.0" styleClass="main-panel"
+            stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.range.victusHub.fan.FanAndKeyboardController">
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <top>
+        <VBox alignment="CENTER" spacing="15.0" styleClass="header-box">
+            <Label styleClass="title-label" text="Victus Hub"/>
+            <Label fx:id="statusText" styleClass="status-label" text="Status: Initializing..."/>
+            <Separator styleClass="header-separator"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20.0">
+
+            <!-- Fan container: her fan için buraya TitledPane eklenecek -->
+            <VBox fx:id="fanContainer" spacing="20"/>
+
+            <!-- Keyboard RGB kontrolü -->
+            <TitledPane collapsible="false" styleClass="control-pane" text="Keyboard Backlight (RGB)">
+                <VBox spacing="15.0">
+                    <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                    </padding>
+                    <Label styleClass="control-label" text="Choose Color:"/>
+                    <ColorPicker fx:id="colorPicker" styleClass="custom-color-picker"/>
+                    <Button maxWidth="Infinity" onAction="#onSetLightClick"
+                            styleClass="action-button-orange" text="Set Light"/>
+                </VBox>
+            </TitledPane>
+
+            <!-- Keyboard ışık seviyesi -->
+            <TitledPane collapsible="false" styleClass="control-pane" text="Keyboard Light Level">
+                <VBox spacing="15.0">
+                    <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                    </padding>
+                    <Label styleClass="control-label" text="Adjust Brightness (0 - 100):"/>
+                    <Slider fx:id="suryaLightSlider" min="0" max="100" value="50"
+                            showTickLabels="true" showTickMarks="true" majorTickUnit="10"
+                            styleClass="custom-slider"/>
+                    <HBox alignment="CENTER" spacing="20">
+                        <Button maxWidth="Infinity" onAction="#onApplyLightClick"
+                                styleClass="action-button-blue" text="Apply Light" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                    <Label fx:id="lightValueLabel" alignment="CENTER"
+                           styleClass="status-label" text="Current Brightness: 50%"/>
+                </VBox>
+            </TitledPane>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <Label styleClass="footer-label" text="System Control Interface v2.1"
+               BorderPane.alignment="CENTER">
+            <VBox.margin>
+                <Insets top="20.0"/>
+            </VBox.margin>
+        </Label>
+    </bottom>
+</BorderPane>

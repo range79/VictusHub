@@ -1,4 +1,4 @@
-rootProject.name = "victushub"
+rootProject.name = "VictusHub-gui"
 pluginManagement {
     repositories {
         gradlePluginPortal()

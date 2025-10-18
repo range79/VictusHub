@@ -4,6 +4,7 @@
 !**/src/main/**/build/
 !**/src/test/**/build/
 .kotlin
+build
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

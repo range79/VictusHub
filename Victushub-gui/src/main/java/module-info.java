@@ -1,4 +1,4 @@
-module com.example.victusHub {
+module com.range.victusHub {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -8,6 +8,8 @@ module com.example.victusHub {
     requires java.logging;
     requires org.slf4j;
 
-    opens com.example.victusHub to javafx.fxml;
-    exports com.example.victusHub;
+    opens com.range.victusHub to javafx.fxml;
+    exports com.range.victusHub;
+    exports com.range.victusHub.fan;
+    opens com.range.victusHub.fan to javafx.fxml;
 }

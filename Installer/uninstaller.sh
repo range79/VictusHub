@@ -1,29 +1,44 @@
 #!/usr/bin/env bash
-# VictusHub full uninstall/restore script
+# VictusHub restore/uninstall script
+# Moves GUI and Service binaries back, cleans sudoers and desktop entry
 
 set -e
 
 APP_NAME="VictusHub"
-TARGET="/usr/local/bin/victusHub"
-RESTORE_DIR="$PWD"
-RESTORED_BINARY="$RESTORE_DIR/victusHub"
+RESTORE_DIR="$PWD"  # Scriptin çalıştığı dizin
+GUI_TARGET="/usr/local/bin/VictusHub"
+SERVICE_TARGET="/usr/local/bin/VictusService"
+RESTORED_GUI="$RESTORE_DIR/VictusHub"
+RESTORED_SERVICE="$RESTORE_DIR/VictusService"
 
-SUDOERS_FILE="/etc/sudoers.d/victusHub-$(whoami)"
+# Desktop entry & icon
 DESKTOP_DIR="$HOME/.local/share/applications"
 DESKTOP_FILE="$DESKTOP_DIR/victushub.desktop"
 ICON_TARGET_DIR="$HOME/.local/share/icons/hicolor/128x128/apps"
 ICON_TARGET="$ICON_TARGET_DIR/victushub.png"
 
-echo "Starting full uninstall/restore of $APP_NAME..."
+# Sudoers
+SUDOERS_FILE="/etc/sudoers.d/victusService-$(whoami)"
 
-# ---------- 1️⃣ Move binary back ----------
-if [[ -f "$TARGET" ]]; then
-    echo "Moving $TARGET -> $RESTORED_BINARY (requires sudo)..."
-    sudo mv "$TARGET" "$RESTORED_BINARY"
-    sudo chmod 755 "$RESTORED_BINARY"
-    echo "Binary restored to $RESTORE_DIR"
+echo "Starting restore/uninstall of $APP_NAME..."
+
+# ---------- 1️⃣ Move binaries back ----------
+if [[ -f "$GUI_TARGET" ]]; then
+    echo "Moving $GUI_TARGET -> $RESTORED_GUI (requires sudo)..."
+    sudo mv "$GUI_TARGET" "$RESTORED_GUI"
+    sudo chmod 755 "$RESTORED_GUI"
+    echo "GUI binary restored to $RESTORE_DIR"
 else
-    echo "Binary not found in $TARGET, skipping move."
+    echo "GUI binary not found at $GUI_TARGET, skipping move."
+fi
+
+if [[ -f "$SERVICE_TARGET" ]]; then
+    echo "Moving $SERVICE_TARGET -> $RESTORED_SERVICE (requires sudo)..."
+    sudo mv "$SERVICE_TARGET" "$RESTORED_SERVICE"
+    sudo chmod 755 "$RESTORED_SERVICE"
+    echo "Service binary restored to $RESTORE_DIR"
+else
+    echo "Service binary not found at $SERVICE_TARGET, skipping move."
 fi
 
 # ---------- 2️⃣ Remove sudoers ----------
@@ -58,4 +73,4 @@ if command -v update-desktop-database >/dev/null 2>&1; then
     update-desktop-database "$DESKTOP_DIR" || true
 fi
 
-echo "Full uninstall/restore complete. $APP_NAME binary is back in $RESTORE_DIR."
+echo "Restore/uninstall complete. Binaries are back in $RESTORE_DIR."
