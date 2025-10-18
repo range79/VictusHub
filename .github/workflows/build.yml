@@ -2,10 +2,10 @@ name: GraalVM build
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 
 permissions:
@@ -37,7 +37,7 @@ jobs:
             libfreetype6-dev libgl-dev libglib2.0-dev libgtk-3-dev \
             libpango1.0-dev libx11-dev libxtst-dev
 
-      - name: Example step
+      - name: Java Check
         run: |
           echo "GRAALVM_HOME: $GRAALVM_HOME"
           echo "JAVA_HOME: $JAVA_HOME"
