@@ -17,9 +17,6 @@ import java.util.Properties;
 public class FanAndKeyboardController {
 
     private final Logger logger = LoggerFactory.getLogger(FanAndKeyboardController.class);
-    private List<Path> fanPaths;
-    private final List<Slider> fanSliders = new ArrayList<>();
-    private final List<Label> fanLabels = new ArrayList<>();
 
     @FXML
     private VBox fanContainer;
@@ -32,67 +29,63 @@ public class FanAndKeyboardController {
     @FXML
     private ColorPicker colorPicker;
 
+    private FanController fanController;
+    private List<FanController.Fan> fans;
+
     private static final Path CONFIG_PATH = Path.of(System.getProperty("user.home"), ".config/victusservice/victus.config");
 
     @FXML
     private void initialize() {
-        fanPaths = detectFanPaths();
-        for (int i = 0; i < fanPaths.size(); i++) {
-            Slider slider = new Slider(0, 10000, 0);
-            slider.setShowTickLabels(true);
-            slider.setShowTickMarks(true);
+        fanController = new FanController();
+        fans = fanController.getFans();
 
-            Label label = new Label("Current RPM: 0");
-            slider.valueProperty().addListener((obs, oldVal, newVal) ->
-                    label.setText("Current RPM: " + newVal.intValue()));
-
-            Button applyButton = new Button("Apply");
-            int index = i;
-            applyButton.setOnAction(e -> applyFanSpeed(index));
-
-            VBox fanBox = new VBox(5, new Label("Fan " + (i + 1)), slider, label, applyButton);
-            fanContainer.getChildren().add(fanBox);
-            fanSliders.add(slider);
-            fanLabels.add(label);
+        // Fan UI
+        for (int i = 0; i < fans.size(); i++) {
+            FanController.Fan fan = fans.get(i);
+            TitledPane pane = createFanPane(fan, i);
+            fanContainer.getChildren().add(pane);
         }
 
+        // Keyboard light slider
         suryaLightSlider.valueProperty().addListener((obs, oldVal, newVal) ->
                 lightValueLabel.setText("Current Brightness: " + newVal.intValue() + "%"));
     }
 
-    private List<Path> detectFanPaths() {
-        List<Path> paths = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("/sys/devices/platform/hp-wmi/hwmon/"), "hwmon*")) {
-            for (Path hwmon : stream) {
-                int i = 1;
-                while (Files.exists(hwmon.resolve("fan" + i + "_target"))) {
-                    paths.add(hwmon.resolve("fan" + i + "_target"));
-                    i++;
-                }
-            }
-        } catch (IOException e) {
-            logger.error("Error detecting fan paths", e);
-        }
-        return paths;
-    }
+    private TitledPane createFanPane(FanController.Fan fan, int index) {
+        VBox content = new VBox(10);
 
-    private void applyFanSpeed(int index) {
-        int speed = (int) fanSliders.get(index).getValue();
-        Path fanPath = fanPaths.get(index);
-        String command = "echo " + speed + " | sudo tee " + fanPath.toString();
-        runCommandAsync(command,
-                () -> {
-                    fanLabels.get(index).setText("Applied Speed: " + speed + " RPM");
-                    updateConfig("fan" + (index + 1), String.valueOf(speed));
-                },
-                () -> fanLabels.get(index).setText("Error applying fan speed"));
+        Label label = new Label(fan.toString());
+
+        Slider slider = new Slider(0, fan.getMaxRpm(), fan.getMaxRpm() / 2.0);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+
+        Button applyButton = new Button("Apply Speed");
+        applyButton.setOnAction(e -> {
+            fan.setSpeed((int) slider.getValue());
+            label.setText("Applied Speed: " + (int) slider.getValue());
+            updateConfig("fan" + (index + 1), String.valueOf((int) slider.getValue()));
+        });
+
+        Button autoButton = new Button("Auto Mode");
+        autoButton.setOnAction(e -> {
+            fan.setAutoMode();
+            label.setText("Auto Mode Enabled");
+            updateConfig("fan" + (index + 1), "auto");
+        });
+
+        content.getChildren().addAll(label, slider, applyButton, autoButton);
+
+        TitledPane pane = new TitledPane("Fan " + (index + 1), content);
+        pane.setCollapsible(false);
+        return pane;
     }
 
     @FXML
     private void onApplyLightClick() {
         int brightness = (int) suryaLightSlider.getValue();
-        String command = "echo " + brightness + " | sudo tee /sys/class/leds/hp::kbd_backlight/brightness";
-        runCommandAsync(command,
+        String cmd = "echo " + brightness + " | sudo tee /sys/class/leds/hp::kbd_backlight/brightness";
+        runCommandAsync(cmd,
                 () -> {
                     lightValueLabel.setText("Applied Brightness: " + brightness + "%");
                     updateConfig("kbd_light", String.valueOf(brightness));
@@ -106,8 +99,9 @@ public class FanAndKeyboardController {
         int r = (int) (color.getRed() * 255);
         int g = (int) (color.getGreen() * 255);
         int b = (int) (color.getBlue() * 255);
-        String command = String.format("echo \"%d %d %d\" | sudo tee /sys/class/leds/hp::kbd_backlight/multi_intensity", r, g, b);
-        runCommandAsync(command,
+
+        String cmd = String.format("echo \"%d %d %d\" | sudo tee /sys/class/leds/hp::kbd_backlight/multi_intensity", r, g, b);
+        runCommandAsync(cmd,
                 () -> {
                     logger.info("RGB Applied: " + r + " " + g + " " + b);
                     updateConfig("kbd_color", r + "," + g + "," + b);
@@ -136,9 +130,7 @@ public class FanAndKeyboardController {
         try {
             Properties props = new Properties();
             if (Files.exists(CONFIG_PATH)) {
-                try {
-                    props.load(Files.newBufferedReader(CONFIG_PATH));
-                } catch (IOException ignored) {}
+                try { props.load(Files.newBufferedReader(CONFIG_PATH)); } catch (IOException ignored) {}
             } else {
                 Files.createDirectories(CONFIG_PATH.getParent());
                 Files.createFile(CONFIG_PATH);
