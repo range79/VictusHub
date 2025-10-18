@@ -5,9 +5,31 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="/usr/share/java/gradle" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/VictusService" />
+            <option value="$PROJECT_DIR$/Victushub-gui" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/VictusService" />
+        <option name="gradleHome" value="/usr/share/java/gradle" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/VictusService" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Victushub-gui" />
+        <option name="gradleHome" value="/usr/share/java/gradle" />
+        <option name="gradleJvm" value="graalvm-jdk-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Victushub-gui" />
           </set>
         </option>
       </GradleProjectSettings>

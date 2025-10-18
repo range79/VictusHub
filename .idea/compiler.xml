@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="1.6">
+      <module name="victushub" target="17" />
+      <module name="victusHub-gui" target="21" />
+      <module name="victushub-gui" target="17" />
+      <module name="victushub-gui.main" target="17" />
+      <module name="victusHub-gui.main" target="21" />
+      <module name="victusHub-gui.test" target="21" />
+      <module name="victushub-gui.test" target="17" />
+      <module name="victushub.main" target="17" />
+      <module name="victushub.test" target="17" />
+      <module name="VictusHub.victushub-gui.main" target="21" />
+      <module name="VictusHub.victushub-gui.test" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
