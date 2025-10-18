@@ -56,7 +56,7 @@ tasks.withType<Test> {
 gluonfx {
     reflectionList = listOf(
         "com.range.victusHub.fan.FanAndKeyboardController",
-        "com.range.victusHub.fan.FanCounter",
+        "com.range.victusHub.fan.FanController",
 
         "com.range.victusHub.VictusHub",
         "com.range.victusHub.fan.FanController",
