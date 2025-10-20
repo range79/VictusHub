@@ -566,14 +566,6 @@ gradle test
 
 ---
 
-## Roadmap
-
-- [X] **`Task 1`**: <strike>Implement feature one.</strike>
-- [ ] **`Task 2`**: Implement feature two.
-- [ ] **`Task 3`**: Implement feature three.
-
----
-
 ## Contributing
 
 - **💬 [Join the Discussions](https://github.com/range79/VictusHub/discussions)**: Share your insights, provide feedback, or ask questions.
@@ -619,7 +611,7 @@ gradle test
 
 ## License
 
-Victushub is protected under the [LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
+Victushub is protected under the [MIT](LICENSE) License. For more details, refer to the [LICENSE](LICENSE) file.
 
 ---
 
